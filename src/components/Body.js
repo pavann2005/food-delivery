@@ -1,12 +1,12 @@
-import RestaurantCard, {
-  withPromotedLabel,
-} from "./RestaurantCard";
-
-import {
+import React, {
   useEffect,
   useState,
   useContext,
 } from "react";
+
+import RestaurantCard, {
+  withPromotedLabel,
+} from "./RestaurantCard";
 
 import Shimmer from "./Shimmer";
 
@@ -18,9 +18,7 @@ import userContext from "../utilis/UserContext";
 
 import mockRestaurantData from "../utilis/mockRestaurantData";
 
-// Body Component
 const Body = () => {
-  // State Variables
   const [listOfRestaurant, setlistOfRestaurant] =
     useState([]);
 
@@ -30,61 +28,53 @@ const Body = () => {
   const [searchText, setSearchText] =
     useState("");
 
-  // HOC
   const RestaurantCardPromoted =
     withPromotedLabel(RestaurantCard);
 
-  // Load Mock Data
   useEffect(() => {
     setlistOfRestaurant(mockRestaurantData);
     setFilteredRestaurant(mockRestaurantData);
   }, []);
 
-  // Online Status
   const onlineStatus = useOnlineStatus();
 
-  if (onlineStatus === false) {
+  if (!onlineStatus) {
     return (
       <h1>
         Looks like you are offline !!
-        Check your Internet Connection
       </h1>
     );
   }
 
-  // Context API
   const {
     isLoggedUser,
     setLoggedinInfo,
   } = useContext(userContext);
 
-  // Shimmer UI
   if (listOfRestaurant.length === 0) {
     return <Shimmer />;
   }
 
   return (
     <div className="body">
-      {/* Search + Filter Section */}
       <div className="cont-bn">
-        
+
         {/* Search */}
         <div className="Search">
           <input
             className="search-box"
-            data-testid="search-input"
-            placeholder="Search your Restaurant..."
             type="text"
+            placeholder="Search Restaurant"
             value={searchText}
-            onChange={(e) => {
-              setSearchText(e.target.value);
-            }}
+            onChange={(e) =>
+              setSearchText(e.target.value)
+            }
           />
 
           <button
             className="btn"
             onClick={() => {
-              const filteredRestaurant =
+              const filteredData =
                 listOfRestaurant.filter((res) =>
                   res.info.name
                     .toLowerCase()
@@ -94,7 +84,7 @@ const Body = () => {
                 );
 
               setFilteredRestaurant(
-                filteredRestaurant
+                filteredData
               );
             }}
           >
@@ -102,13 +92,16 @@ const Body = () => {
           </button>
         </div>
 
-        {/* Top Rated Filter */}
+        {/* Top Rated */}
         <button
           className="filter-btn"
           onClick={() => {
             const filteredData =
               listOfRestaurant.filter(
-                (res) => res.info.avgRating > 4
+                (res) =>
+                  Number(
+                    res.info.avgRating
+                  ) > 4
               );
 
             setFilteredRestaurant(
@@ -121,20 +114,17 @@ const Body = () => {
 
         {/* Username */}
         <div>
-          <label htmlFor="username">
-            Username :
-          </label>
+          <label>Username :</label>
 
           <input
-            id="username"
             className="search-box"
             type="text"
             value={isLoggedUser}
-            onChange={(e) => {
+            onChange={(e) =>
               setLoggedinInfo(
                 e.target.value
-              );
-            }}
+              )
+            }
           />
         </div>
       </div>
