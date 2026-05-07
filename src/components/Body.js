@@ -4,6 +4,7 @@ import Shimmer from "./Shimmer";
 import { Link } from "react-router-dom";
 import useOnlineStatus from "../utilis/useOnlineStatus";
 import userContext from "../utilis/UserContext";
+import mockRestaurantData from "../utilis/mockRestaurantData";
 
 // definition of state react variable
 // ! Whenever state variable updates, react triggers a reconciliation cycle (re-renders the component)
